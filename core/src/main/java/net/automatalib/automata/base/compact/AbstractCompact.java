@@ -150,6 +150,7 @@ public abstract class AbstractCompact<I, T, SP, TP> implements MutableAutomaton<
         return alphabet;
     }
 
+
     @Override
     public final void addAlphabetSymbol(I symbol) {
 
@@ -171,6 +172,7 @@ public abstract class AbstractCompact<I, T, SP, TP> implements MutableAutomaton<
             this.alphabetSize = newAlphabetSize;
         }
     }
+
 
     @Override
     public Collection<I> getLocalInputs(Integer state) {
@@ -426,7 +428,7 @@ public abstract class AbstractCompact<I, T, SP, TP> implements MutableAutomaton<
     /**
      * A utility class that encapsulates necessary information for performing an update of the stored automata data.
      */
-    protected static final class Payload {
+    protected static class Payload {
 
         private final int oldSizeHint;
         private final int newSizeHint;
@@ -458,5 +460,6 @@ public abstract class AbstractCompact<I, T, SP, TP> implements MutableAutomaton<
             return new Payload(oldSizeHint, newSizeHint, numStates, stateCapacity, alphabetSize, type);
         }
     }
+
 
 }

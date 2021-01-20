@@ -17,6 +17,9 @@ package net.automatalib.util.automata.builders;
 
 import net.automatalib.automata.MutableAutomaton;
 import net.automatalib.automata.base.compact.CompactTransition;
+import net.automatalib.automata.ca.MutableFIFOA;
+import net.automatalib.automata.ca.impl.compact.CompactFIFOA;
+import net.automatalib.automata.concepts.TransitionAction;
 import net.automatalib.automata.fsa.MutableDFA;
 import net.automatalib.automata.fsa.impl.compact.CompactDFA;
 import net.automatalib.automata.fsa.impl.compact.CompactNFA;
@@ -28,6 +31,8 @@ import net.automatalib.automata.transducers.impl.compact.CompactMoore;
 import net.automatalib.automata.transducers.impl.compact.CompactSST;
 import net.automatalib.words.Alphabet;
 import net.automatalib.words.Word;
+
+import java.util.List;
 
 /**
  * Fluent interface automaton builders.
@@ -53,6 +58,14 @@ public final class AutomatonBuilders {
 
     public static <I> FSABuilder<Integer, I, CompactNFA<I>> newNFA(Alphabet<I> alphabet) {
         return new FSABuilder<>(new CompactNFA<>(alphabet));
+    }
+
+    public static <C, I> FIFOBuilder<Integer, C, I, CompactFIFOA<C,I>> newFIFOA(Alphabet<C> channelNames, Alphabet<I> alphabet){
+        return forFIFOA(new CompactFIFOA<>(channelNames, alphabet));
+    }
+
+    public static <S, C, I, A extends MutableFIFOA<S,C,I, CompactTransition<TransitionAction<C,I>>>>  FIFOBuilder<S,C,I,A> forFIFOA(A fifoa) {
+        return new FIFOBuilder<>(fifoa);
     }
 
     public static <I, O> MealyBuilder<Integer, I, CompactTransition<O>, O, CompactMealy<I, O>> newMealy(Alphabet<I> alphabet) {
