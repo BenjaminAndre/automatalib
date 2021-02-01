@@ -15,14 +15,14 @@
  */
 package net.automatalib.words;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import net.automatalib.AutomataLibSettingsTest;
 import org.testng.Assert;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Tests for static utility methods.
@@ -152,5 +152,15 @@ public class WordTest {
         // See configuration in AutomataLibSettingsTest & automatalib.properties
         Assert.assertEquals(empty.toString(), "OVERRIDDEN");
         Assert.assertEquals(abc.toString(), "delim_leftsymbol_delim_leftasymbol_delim_rightsymbol_sepsymbol_delim_leftbsymbol_delim_rightsymbol_sepsymbol_delim_leftcsymbol_delim_rightdelim_right");
+    }
+
+    @Test
+    public void insertTest() {
+        final Word<Character> initial = Word.fromCharSequence("kameameha");
+        final char insert = 'h';
+        final int pos = 4;
+
+        Assert.assertEquals(initial.insert(insert, pos), Word.fromCharSequence("kamehameha"));
+
     }
 }

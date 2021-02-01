@@ -55,4 +55,8 @@ public class FastFIFOATransitionAction<C,I> implements TransitionAction<C,I> {
     public void setAction(Action action) {
         this.action = action;
     }
+
+    public String toString(){
+        return getChannelName() + getAction().getSymbol() + getManipulatedSymbol();
+    }
 }

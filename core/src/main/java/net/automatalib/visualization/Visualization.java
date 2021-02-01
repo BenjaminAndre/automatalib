@@ -15,19 +15,20 @@
  */
 package net.automatalib.visualization;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-
 import net.automatalib.AutomataLibProperty;
 import net.automatalib.AutomataLibSettings;
 import net.automatalib.automata.Automaton;
+import net.automatalib.automata.ca.MutableCA;
 import net.automatalib.automata.graphs.TransitionEdge;
 import net.automatalib.graphs.Graph;
 import net.automatalib.graphs.concepts.GraphViewable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 public final class Visualization {
 
@@ -107,6 +108,11 @@ public final class Visualization {
         visualize(graph, inputs, true);
     }
 
+    public static <S,C,I,T> void visualize(MutableCA<S,C,I,T> ca, Collection<? extends I> input, Collection<? extends C> channelNames){
+        visualize(ca, input, channelNames, true);
+    }
+
+
     @SafeVarargs
     public static <S, I, T> void visualize(Automaton<S, I, T> graph,
                                            Collection<? extends I> inputs,
@@ -116,6 +122,10 @@ public final class Visualization {
 
     public static <S, I, T> void visualize(Automaton<S, I, T> graph, Collection<? extends I> inputs, boolean modal) {
         visualize(graph, inputs, modal, Collections.emptyMap());
+    }
+
+    public static <S,C, I, T> void visualize(MutableCA<S,C,I,T> ca, Collection<? extends I> inputs, Collection<? extends C> channels, boolean modal) {
+        visualize(ca, inputs, channels, modal, Collections.emptyMap());
     }
 
     @SafeVarargs
@@ -131,6 +141,11 @@ public final class Visualization {
                                            boolean modal,
                                            Map<String, String> options) {
         INSTANCE.visualizeInternal(graph.transitionGraphView(inputs), modal, options);
+    }
+
+    public static <S,C, I, T> void visualize(MutableCA<S,C,I,T> ca, Collection<? extends I> inputs, Collection<? extends C> channels, boolean modal,
+                                           Map<String, String> options) {
+        INSTANCE.visualizeInternal(ca.transitionGraphView(inputs, channels), modal, options);
     }
 
     @SafeVarargs

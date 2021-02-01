@@ -15,14 +15,14 @@
  */
 package net.automatalib.automata.graphs;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import net.automatalib.automata.Automaton;
 import net.automatalib.automata.concepts.InputAlphabetHolder;
 import net.automatalib.automata.visualization.AutomatonVisualizationHelper;
 import net.automatalib.visualization.VisualizationHelper;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class AutomatonGraphView<S, I, T, A extends Automaton<S, I, T>>
         extends AbstractAutomatonGraphView<S, A, TransitionEdge<I, T>> {

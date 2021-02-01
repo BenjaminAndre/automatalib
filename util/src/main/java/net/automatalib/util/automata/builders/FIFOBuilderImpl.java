@@ -127,7 +127,7 @@ class FIFOBuilderImpl<S, C, I, A extends MutableFIFOA<S,C,I, CompactTransition<T
     @DSLAction
     public void read(I symbol) {
         this.currentInputs = Collections.singletonList(symbol);
-        this.currentTransProp.setAction(TransitionAction.Action.PUSH);
+        this.currentTransProp.setAction(TransitionAction.Action.PULL);
         this.currentTransProp.setManipulatedSymbol(symbol);
     }
 
@@ -137,14 +137,14 @@ class FIFOBuilderImpl<S, C, I, A extends MutableFIFOA<S,C,I, CompactTransition<T
         this.currentInputs = new ArrayList<>(1 + otherSymbols.length);
         this.currentInputs.add(firstSymbol);
         Collections.addAll(this.currentInputs, otherSymbols);
-        this.currentTransProp.setAction(TransitionAction.Action.PUSH);
+        this.currentTransProp.setAction(TransitionAction.Action.PULL);
         this.currentTransProp.setManipulatedSymbol(firstSymbol);
     }
 
     @DSLAction
     public void write(I symbol) {
         this.currentInputs = Collections.singletonList(symbol);
-        this.currentTransProp.setAction(TransitionAction.Action.PULL);
+        this.currentTransProp.setAction(TransitionAction.Action.PUSH);
         this.currentTransProp.setManipulatedSymbol(symbol);
     }
 
@@ -154,7 +154,7 @@ class FIFOBuilderImpl<S, C, I, A extends MutableFIFOA<S,C,I, CompactTransition<T
         this.currentInputs = new ArrayList<>(1 + otherSymbols.length);
         this.currentInputs.add(firstSymbol);
         Collections.addAll(this.currentInputs, otherSymbols);
-        this.currentTransProp.setAction(TransitionAction.Action.PULL);
+        this.currentTransProp.setAction(TransitionAction.Action.PUSH);
         this.currentTransProp.setManipulatedSymbol(firstSymbol);
     }
 

@@ -2,23 +2,28 @@ package net.automatalib.automata.base.compact;
 
 import net.automatalib.automata.MutableDeterministic;
 import net.automatalib.automata.ca.MutableFIFOA;
+import net.automatalib.automata.concepts.ChannelNamesHolder;
 import net.automatalib.automata.concepts.TransitionAction;
+import net.automatalib.automata.simple.SimpleDeterministicAutomaton;
 import net.automatalib.words.Alphabet;
+import net.automatalib.words.PhiChar;
+import net.automatalib.words.impl.Alphabets;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
-public class UniversalChannelCompact<C,I> extends AbstractCompact<I, CompactTransition<TransitionAction<C,I>>, Void, TransitionAction<C,I>>
+public abstract class UniversalChannelCompact<C,I> extends AbstractCompact<I, CompactTransition<TransitionAction<C,I>>, Void, TransitionAction<C,I>>
                                           implements MutableFIFOA<Integer, C, I, CompactTransition<TransitionAction<C,I>>>,
                                                      MutableDeterministic.StateIntAbstraction<I, CompactTransition<TransitionAction<C,I>>, Void, TransitionAction<C,I>>,
                                                      MutableDeterministic.FullIntAbstraction<CompactTransition<TransitionAction<C,I>>, Void, TransitionAction<C,I>>,
-                                                     Serializable {
+                                                     Serializable,
+                                                     ChannelNamesHolder<C> {
 
     private int[] transitions;
-    private @Nullable TransitionAction<C,I>[] transitionProperties;
+    private @Nullable TransitionAction<C, I>[] transitionProperties;
     private int initial = AbstractCompact.INVALID_STATE;
     private final Alphabet<C> channelNames;
 
@@ -69,7 +74,8 @@ public class UniversalChannelCompact<C,I> extends AbstractCompact<I, CompactTran
     }
 
     @Override
-    public void setStateProperty(Integer state, Void property) {}
+    public void setStateProperty(Integer state, Void property) {
+    }
 
     @Override
     public void setTransitionProperty(CompactTransition<TransitionAction<C, I>> transition, TransitionAction<C, I> property) {
@@ -104,6 +110,45 @@ public class UniversalChannelCompact<C,I> extends AbstractCompact<I, CompactTran
     public CompactTransition<TransitionAction<C, I>> createTransition(Integer successor, TransitionAction<C, I> properties) {
         return createTransition(successor.intValue(), properties);
     }
+
+    // Returns only the used transitions
+    public int[] getTransitions() {
+        int limit = this.transitions.length;
+        for(int i = 0; i < this.transitions.length; i++){
+            if(this.transitions[i] == AbstractCompact.INVALID_STATE) {
+                limit = i;
+                break;
+            }
+        }
+        //end is exclusive but break is late
+        return Arrays.copyOfRange(this.transitions, 0, limit);
+    }
+
+    public int getTransitionOriginState(int i) {
+        return getStateFromMemoryIndex(i);
+    }
+
+    public int getTransitionTargetState(int i) {
+        return this.transitions[i];
+    }
+
+    public @Nullable TransitionAction<C, I>[] getTransitionProperties() {
+        int limit = this.transitionProperties.length;
+        for(int i = 0; i < this.transitionProperties.length; i++){
+            if(this.transitionProperties[i] == null) {
+                limit = i;
+                break;
+            }
+        }
+        //end is exclusive but break is late
+        return Arrays.copyOfRange(this.transitionProperties, 0, limit);
+    }
+
+    public @Nullable TransitionAction<C, I> getTransitionProperty(int i) {
+        if (this.transitionProperties == null) return null;
+        return this.transitionProperties[i];
+    }
+
 
     @Override
     public void setInitialState(@Nullable Integer state) {
@@ -178,5 +223,29 @@ public class UniversalChannelCompact<C,I> extends AbstractCompact<I, CompactTran
     }
 
     @Override
-    public void setStateProperty(int state, @Nullable Void property) {}
+    public void setStateProperty(int state, @Nullable Void property) {
+    }
+
+    /**
+     * @return all the possible PhiChar for this
+     */
+    public Alphabet<PhiChar> getAnnotationAlphabet() {
+        List<PhiChar> possibilities = new ArrayList<>();
+
+        //Both bar and unbar only for sender
+        for (int i = 0; i < this.transitions.length; i++) {
+            if (this.transitions[i] != SimpleDeterministicAutomaton.IntAbstraction.INVALID_STATE) {
+                if (this.transitionProperties[i].getAction() == TransitionAction.Action.PUSH) {
+                    possibilities.add(new PhiChar(i, false));
+                    possibilities.add(new PhiChar(i, true));
+                }
+            }
+        }
+
+        // State symbols
+        for (int i : this.getStates()) {
+            possibilities.add(new PhiChar(i, false, true));
+        }
+        return Alphabets.fromList(possibilities);
+    }
 }

@@ -18,11 +18,11 @@ package net.automatalib.automata.ca;
 import net.automatalib.automata.MutableAutomaton;
 import net.automatalib.automata.UniversalAutomaton;
 import net.automatalib.automata.concepts.TransitionAction;
-import net.automatalib.commons.util.WrapperUtil;
+import net.automatalib.automata.graphs.TransitionEdge;
+import net.automatalib.graphs.UniversalGraph;
 import net.automatalib.ts.UniversalTransitionSystem;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author fh
@@ -30,5 +30,9 @@ import java.util.List;
 public interface MutableCA<S, C, I, T> extends UniversalTransitionSystem<S,I,T,Void,TransitionAction<C,I>>,
                                             UniversalAutomaton<S,I,T,Void,TransitionAction<C,I>>,
                                             MutableAutomaton<S,I,T,Void,TransitionAction<C,I>> {
+
+
+    UniversalGraph<S, TransitionEdge<I, T>, Void, TransitionEdge.Property<I, TransitionAction<C,I>>> transitionGraphView(
+            Collection<? extends I> inputs, Collection<? extends C> channels);
 
 }

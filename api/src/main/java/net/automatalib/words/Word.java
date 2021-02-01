@@ -15,24 +15,6 @@
  */
 package net.automatalib.words;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.AbstractList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.function.Function;
-import java.util.function.ToIntFunction;
-import java.util.stream.Collector;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
 import net.automatalib.AutomataLibProperty;
 import net.automatalib.AutomataLibSettings;
 import net.automatalib.commons.smartcollections.ArrayWritable;
@@ -40,6 +22,15 @@ import net.automatalib.commons.smartcollections.IntSeq;
 import net.automatalib.commons.util.array.AWUtil;
 import net.automatalib.commons.util.strings.AbstractPrintable;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.ToIntFunction;
+import java.util.stream.Collector;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * A word is an ordered sequence of symbols. {@link Word}s are generally immutable, i.e., a single {@link Word} object
@@ -799,6 +790,12 @@ public abstract class Word<I> extends AbstractPrintable implements ArrayWritable
      */
     public static <I> Collector<I, ?, Word<I>> collector() {
         return new WordCollector<>();
+    }
+
+    public Word<I> insert(I thetaR, int i){
+        Word<I> prefix = this.prefix(i);
+        Word<I> subfix = this.suffix(this.length()-i);
+        return prefix.append(thetaR).concat(subfix);
     }
 
     /*

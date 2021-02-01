@@ -18,6 +18,7 @@ package net.automatalib.automata.base.compact;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import net.automatalib.automata.concepts.TransitionAction;
 import net.automatalib.words.Alphabet;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -128,5 +129,26 @@ public abstract class AbstractCompactSimpleDeterministic<I, SP>
         }
 
         return current;
+    }
+
+    // Returns only the used transitions
+    public int[] getTransitions() {
+        int limit = this.transitions.length;
+        for(int i = 0; i < this.transitions.length; i++){
+            if(this.transitions[i] == AbstractCompact.INVALID_STATE) {
+                limit = i;
+                break;
+            }
+        }
+        //end is exclusive but break is late
+        return Arrays.copyOfRange(this.transitions, 0, limit);
+    }
+
+    public int getTransitionOriginState(int i) {
+        return getStateFromMemoryIndex(i);
+    }
+
+    public int getTransitionTargetState(int i) {
+        return this.transitions[i];
     }
 }

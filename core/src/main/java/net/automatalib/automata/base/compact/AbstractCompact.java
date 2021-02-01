@@ -15,13 +15,6 @@
  */
 package net.automatalib.automata.base.compact;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.function.IntFunction;
-
 import net.automatalib.SupportsGrowingAlphabet;
 import net.automatalib.automata.MutableAutomaton;
 import net.automatalib.automata.MutableDeterministic.FullIntAbstraction;
@@ -33,6 +26,13 @@ import net.automatalib.words.Alphabet;
 import net.automatalib.words.impl.Alphabets;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.IntFunction;
 
 /**
  * Abstract super class for compact automata representations. Compactness is achieved by representing states as
@@ -326,6 +326,10 @@ public abstract class AbstractCompact<I, T, SP, TP> implements MutableAutomaton<
      */
     protected final int toMemoryIndex(int stateId, int inputId) {
         return stateId * alphabetSize + inputId;
+    }
+
+    protected final int getStateFromMemoryIndex(int memoryIndex){
+        return memoryIndex % alphabetSize;
     }
 
     protected final int getSymbolIndex(I input) {

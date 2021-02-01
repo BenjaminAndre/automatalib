@@ -15,10 +15,10 @@
  */
 package net.automatalib.automata.base.compact;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.Serializable;
 import java.util.Objects;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 public final class CompactTransition<TP> implements Serializable {
 
@@ -81,4 +81,10 @@ public final class CompactTransition<TP> implements Serializable {
         result = 31 * result + Objects.hashCode(property);
         return result;
     }
+
+    // Prefix is decided by the user
+    public String toString() {
+        return String.valueOf(memoryIdx);
+    }
+
 }
